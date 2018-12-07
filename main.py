@@ -8,7 +8,7 @@ t = TwitterHandler()
 
 today = datetime.datetime.now()
 query = input("Enter topic to search for : ")
-max_tweets = input("Number of tweets to retrieve per day : ")
+max_tweets = int(input("Number of tweets to retrieve per day : "))
 
 tweets = []
 for i in range(1,4):    # Last three days
