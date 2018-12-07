@@ -3,6 +3,7 @@ from tweepy.streaming import StreamListener
 from tweepy import OAuthHandler
 from tweepy import API
 import datetime,tweepy
+from timex import tag
 
 credentials = {}
 
@@ -35,11 +36,36 @@ class TwitterHandler:
         to_date = date + datetime.timedelta(days=1)
         to_date = to_date.strftime("%Y-%m-%d")
         tweets = []
-        for tweet in tweepy.Cursor(api.search, q=topic, since=from_date, until=to_date).items(max_tweets):
-            tweet_date = datetime.datetime.strptime(tweet._json['created_at'], "%a %b %d  %H:%M:%S %z %Y")
+        for tweet in tweepy.Cursor(self.api.search, q=topic, since=from_date, until=to_date).items(max_tweets):
+            tweet_date = tweet._json['created_at']
             tweet_text = tweet._json['text']
-            tweets.append((tweet_date,tweet))
+            tweets.append((tweet_date,tweet_text))
         return tweets
+
+    def getTimelineTweets(self,date,max_tweets,topic):
+        '''
+
+        :param date: python datetime object
+        :param max_tweets: Maximum number of tweets to return
+        :param topic: Topic to search from
+        :return: List of tuples, tuple format (date,tweet)
+        '''
+        from_date = date -datetime.timedelta(days=1)
+        from_date = from_date.strftime("%Y-%m-%d")
+        to_date = date + datetime.timedelta(days=1)
+        to_date = to_date.strftime("%Y-%m-%d")
+        curr_tweets = 0
+        tweets = []
+        for tweet in tweepy.Cursor(self.api.search, q=topic, since=from_date, until=to_date).items():
+            tweet_date = tweet._json['created_at']
+            tweet_text = tweet._json['text']
+            if len(tag(tweet_text)) > len(tweet_text):
+                tweets.append((tweet_date,tweet_text))
+                curr_tweets += 1
+            if curr_tweets >= max_tweets:
+                break
+        return tweets
+
 
 
 if __name__ == '__main__':
@@ -54,13 +80,11 @@ if __name__ == '__main__':
     to_date = today - datetime.timedelta(days=0)
     to_date = to_date.strftime("%Y-%m-%d")
     tweets = {"1daysago":[],"2daysago":[],"3daysago":[]}
-    for tweet in tweepy.Cursor(api.search, q=query,since=from_date,until=to_date).items():
+    for tweet in tweepy.Cursor(api.search, q=query,lang=['en'],since=from_date,until=to_date).items():
         for i in range(1,4):
             tweet_date = datetime.datetime.strptime(tweet._json['created_at'],"%a %b %d  %H:%M:%S %z %Y")
             if tweet_date.date() == (today - datetime.timedelta(days=i)).date():
-                print(tweet_date.date())
                 tweets['{0}daysago'.format(i)].append((tweet._json['text'],tweet._json['created_at']))
-                print(tweet._json['text'],tweet._json['created_at'])
                 curr_tweets +=1
                 if curr_tweets >= max_tweets:
                     break
