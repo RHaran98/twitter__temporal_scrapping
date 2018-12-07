@@ -59,7 +59,7 @@ class TwitterHandler:
         for tweet in tweepy.Cursor(self.api.search, q=topic, since=from_date, until=to_date).items():
             tweet_date = tweet._json['created_at']
             tweet_text = tweet._json['text']
-            if len(tag(tweet_text)) > len(tweet_text):
+            if len(tag(tweet_text)) > len(tweet_text):  # Filter out non timeline sentences
                 tweets.append((tweet_date,tweet_text))
                 curr_tweets += 1
             if curr_tweets >= max_tweets:
