@@ -36,7 +36,7 @@ class TwitterHandler:
         to_date = date + datetime.timedelta(days=1)
         to_date = to_date.strftime("%Y-%m-%d")
         tweets = []
-        for tweet in tweepy.Cursor(self.api.search, q=topic, since=from_date, until=to_date).items(max_tweets):
+        for tweet in tweepy.Cursor(self.api.search, q=topic + ' -filter:retweets', since=from_date, until=to_date).items(max_tweets):
             tweet_date = tweet._json['created_at']
             tweet_text = tweet._json['text']
             tweets.append((tweet_date,tweet_text))
@@ -56,7 +56,7 @@ class TwitterHandler:
         to_date = to_date.strftime("%Y-%m-%d")
         curr_tweets = 0
         tweets = []
-        for tweet in tweepy.Cursor(self.api.search, q=topic, since=from_date, until=to_date).items():
+        for tweet in tweepy.Cursor(self.api.search, q=topic + ' -filter:retweets', since=from_date, until=to_date).items():
             tweet_date = tweet._json['created_at']
             tweet_text = tweet._json['text']
             if len(tag(tweet_text)) > len(tweet_text):  # Filter out non timeline sentences
