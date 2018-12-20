@@ -14,10 +14,10 @@ date_limit = today - datetime.timedelta(days=0)
 class TwitterHandler:
     def __init__(self):
         self.credentials = {}
-        self.credentials['CONSUMER_KEY'] = 'yfnS1Fqzh4EBnqrKXs0C9fnls'
-        self.credentials['CONSUMER_SECRET'] = 'CDX1TDnzQLMuOezhAxLmSerirZLXhAaJuAALxZ4PDtanSn4sT7'
-        self.credentials['ACCESS_TOKEN'] = '2811020677-cygjhFFFyEGhUATHsD1iAbtcP493qZWSO7lYJ8P'
-        self.credentials['ACCESS_SECRET'] = 'BghXsGvcPhkUdlpUsNmjUNZiHE6prPgzlfWVO7D45pM5e'
+        self.credentials['CONSUMER_KEY'] = ''       # Enter consumer key here
+        self.credentials['CONSUMER_SECRET'] = ''    # Enter consumer secret here
+        self.credentials['ACCESS_TOKEN'] = ''       # Enter access token here
+        self.credentials['ACCESS_SECRET'] = ''      # Enter access secret here
         self.today = datetime.datetime.now()
         self.auth = OAuthHandler(self.credentials['CONSUMER_KEY'], self.credentials['CONSUMER_SECRET'])
         self.auth.set_access_token(self.credentials['ACCESS_TOKEN'], self.credentials['ACCESS_SECRET'])
